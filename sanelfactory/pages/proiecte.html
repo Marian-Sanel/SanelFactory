@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proiecte - Sanel Factory | Galerie Printare 3D și Gravură Laser</title>
+    <meta name="description" content="Descoperă proiectele noastre realizate prin printare 3D și gravură laser. Galerie cu lucrări de calitate profesională.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-cyan': '#00ffff',
+                        'neon-purple': '#bf00ff',
+                        'neon-pink': '#ff0080',
+                        'dark-bg': '#0a0a0a',
+                        'dark-card': '#1a1a1a',
+                        'dark-border': '#333333'
+                    },
+                    animation: {
+                        'pulse-neon': 'pulse-neon 2s ease-in-out infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate'
+                    },
+                    keyframes: {
+                        'pulse-neon': {
+                            '0%': { boxShadow: '0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff' },
+                            '100%': { boxShadow: '0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff' }
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        'glow': {
+                            '0%': { textShadow: '0 0 5px #00ffff' },
+                            '100%': { textShadow: '0 0 20px #00ffff, 0 0 30px #00ffff' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <style>
+        .glass-effect {
+            background: rgba(26, 26, 26, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .neon-border {
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+
+        .neon-text {
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .project-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 255, 255, 0.3);
+        }
+
+        .loading-skeleton {
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Modal styles */
+        .modal {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Masonry grid */
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .masonry-grid {
+                column-count: 4;
+            }
+        }
+
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 2rem;
+            display: inline-block;
+            width: 100%;
+        }
+
+        /* Filter buttons */
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(45deg, #00ffff, #bf00ff);
+            color: #000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="glass-effect fixed w-full top-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="/" class="text-2xl font-bold neon-text hover:animate-glow transition-all duration-300">
+                    Sanel Factory
+                </a>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="/" class="hover:text-neon-cyan transition-colors duration-300">Acasă</a>
+                <a href="/blog" class="hover:text-neon-cyan transition-colors duration-300">Blog</a>
+                <a href="/proiecte" class="text-neon-cyan font-semibold">Proiecte</a>
+                <a href="/#servicii" class="hover:text-neon-cyan transition-colors duration-300">Servicii</a>
+                <a href="/#contact" class="hover:text-neon-cyan transition-colors duration-300">Contact</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-neon-cyan">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden mt-4 glass-effect rounded-lg p-4">
+            <a href="/" class="block py-2 hover:text-neon-cyan transition-colors duration-300">Acasă</a>
+            <a href="/blog" class="block py-2 hover:text-neon-cyan transition-colors duration-300">Blog</a>
+            <a href="/proiecte" class="block py-2 text-neon-cyan font-semibold">Proiecte</a>
+            <a href="/#servicii" class="block py-2 hover:text-neon-cyan transition-colors duration-300">Servicii</a>
+            <a href="/#contact" class="block py-2 hover:text-neon-cyan transition-colors duration-300">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-16">
+        <!-- Hero Section -->
+        <section class="max-w-7xl mx-auto px-6 py-16 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 neon-text animate-glow">
+                Proiectele Noastre
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                Descoperă galeria noastră cu proiecte realizate prin printare 3D și gravură laser. Fiecare lucrare reflectă pasiunea noastră pentru inovație și calitate.
+            </p>
+        </section>
+
+        <!-- Filter Section -->
+        <section class="max-w-7xl mx-auto px-6 mb-12">
+            <div class="glass-effect rounded-lg p-6 neon-border">
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button class="filter-btn active px-6 py-3 rounded-lg glass-effect neon-border transition-all duration-300" data-filter="all">
+                        Toate Proiectele
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-lg glass-effect neon-border transition-all duration-300" data-filter="3d-printing">
+                        Printare 3D
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-lg glass-effect neon-border transition-all duration-300" data-filter="laser-engraving">
+                        Gravură Laser
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-lg glass-effect neon-border transition-all duration-300" data-filter="prototyping">
+                        Prototipare
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-lg glass-effect neon-border transition-all duration-300" data-filter="custom">
+                        Personalizate
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Gallery -->
+        <section class="max-w-7xl mx-auto px-6">
+            <!-- Loading State -->
+            <div id="loading-state" class="masonry-grid mb-12">
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-lg overflow-hidden neon-border">
+                        <div class="loading-skeleton h-64 w-full"></div>
+                        <div class="p-4">
+                            <div class="loading-skeleton h-6 rounded mb-2"></div>
+                            <div class="loading-skeleton h-4 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-lg overflow-hidden neon-border">
+                        <div class="loading-skeleton h-48 w-full"></div>
+                        <div class="p-4">
+                            <div class="loading-skeleton h-6 rounded mb-2"></div>
+                            <div class="loading-skeleton h-4 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-lg overflow-hidden neon-border">
+                        <div class="loading-skeleton h-56 w-full"></div>
+                        <div class="p-4">
+                            <div class="loading-skeleton h-6 rounded mb-2"></div>
+                            <div class="loading-skeleton h-4 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Container -->
+            <div id="projects-container" class="hidden masonry-grid mb-12">
+                <!-- Projects will be loaded here -->
+            </div>
+
+            <!-- No Projects Message -->
+            <div id="no-projects" class="hidden text-center py-16">
+                <div class="glass-effect rounded-lg p-12 neon-border max-w-2xl mx-auto">
+                    <svg class="w-24 h-24 mx-auto mb-6 text-neon-cyan opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <h3 class="text-2xl font-bold mb-4 neon-text">Nu există proiecte încă</h3>
+                    <p class="text-gray-400 mb-6">Revino în curând pentru a vedea cele mai noi proiecte realizate de echipa noastră!</p>
+                    <a href="/" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-neon-cyan to-neon-purple rounded-lg font-semibold text-black hover:scale-105 transition-transform duration-300">
+                        Înapoi la pagina principală
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="max-w-4xl mx-auto px-6 py-16">
+            <div class="glass-effect rounded-lg p-8 neon-border text-center">
+                <h2 class="text-3xl font-bold mb-4 neon-text">Ai o idee de proiect?</h2>
+                <p class="text-gray-300 mb-6">Transformă-ți conceptele în realitate cu ajutorul tehnologiilor noastre avansate de fabricație.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/#contact" class="px-8 py-4 bg-gradient-to-r from-neon-cyan to-neon-purple rounded-lg font-semibold text-black hover:scale-105 transition-transform duration-300">
+                        Solicită Ofertă
+                    </a>
+                    <a href="/pages/upload.html" class="px-8 py-4 glass-effect neon-border rounded-lg font-semibold text-neon-cyan hover:bg-neon-cyan hover:text-black transition-all duration-300">
+                        Încarcă Fișier STL
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden modal">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="modal-content glass-effect rounded-lg neon-border max-w-4xl w-full mx-auto">
+                <div class="flex justify-between items-center p-6 border-b border-dark-border">
+                    <h3 id="modal-title" class="text-2xl font-bold neon-text"></h3>
+                    <button id="close-modal" class="text-gray-400 hover:text-white transition-colors duration-300">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="p-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <img id="modal-image" src="" alt="" class="w-full rounded-lg">
+                        </div>
+                        <div>
+                            <div class="mb-4">
+                                <span id="modal-category" class="px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-neon-cyan to-neon-purple text-black"></span>
+                            </div>
+                            <p id="modal-description" class="text-gray-300 leading-relaxed mb-6"></p>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="font-semibold text-neon-cyan mb-2">Detalii Tehnice:</h4>
+                                    <ul id="modal-details" class="text-gray-300 space-y-1">
+                                        <!-- Technical details will be populated here -->
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-semibold text-neon-cyan mb-2">Data Realizării:</h4>
+                                    <p id="modal-date" class="text-gray-300"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 flex gap-4">
+                                <a href="/#contact" class="px-6 py-3 bg-gradient-to-r from-neon-cyan to-neon-purple rounded-lg font-semibold text-black hover:scale-105 transition-transform duration-300">
+                                    Comandă Similar
+                                </a>
+                                <button id="share-project" class="px-6 py-3 glass-effect neon-border rounded-lg font-semibold text-neon-cyan hover:bg-neon-cyan hover:text-black transition-all duration-300">
+                                    Distribuie
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass-effect border-t border-dark-border py-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-2xl font-bold neon-text mb-2">Sanel Factory</h3>
+                    <p class="text-gray-400">Inovație în fabricația digitală</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="/" class="hover:text-neon-cyan transition-colors duration-300">Acasă</a>
+                    <a href="/blog" class="hover:text-neon-cyan transition-colors duration-300">Blog</a>
+                    <a href="/proiecte" class="text-neon-cyan">Proiecte</a>
+                    <a href="/#contact" class="hover:text-neon-cyan transition-colors duration-300">Contact</a>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-8 border-t border-dark-border text-gray-400">
+                <p>&copy; 2024 Sanel Factory. Toate drepturile rezervate.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/proiecte.js"></script>
+</body>
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Sanel Factory</title>
+    <meta name="description" content="Panou de administrare Sanel Factory">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-cyan': '#00ffff',
+                        'neon-purple': '#bf00ff',
+                        'neon-pink': '#ff0080',
+                        'dark-bg': '#0a0a0a',
+                        'dark-card': '#1a1a1a',
+                        'dark-border': '#333333'
+                    },
+                    animation: {
+                        'pulse-neon': 'pulse-neon 2s ease-in-out infinite alternate',
+                        'glow': 'glow 2s ease-in-out infinite alternate'
+                    },
+                    keyframes: {
+                        'pulse-neon': {
+                            '0%': { boxShadow: '0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff' },
+                            '100%': { boxShadow: '0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff' }
+                        },
+                        'glow': {
+                            '0%': { textShadow: '0 0 5px #00ffff' },
+                            '100%': { textShadow: '0 0 20px #00ffff, 0 0 30px #00ffff' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <style>
+        .glass-effect {
+            background: rgba(26, 26, 26, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .neon-border {
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+
+        .neon-text {
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(45deg, #00ffff, #bf00ff);
+            color: #000;
+            font-weight: bold;
+        }
+
+        .loading-skeleton {
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .admin-table {
+            overflow-x: auto;
+        }
+
+        .admin-table table {
+            min-width: 100%;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        .admin-table th {
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+            font-weight: bold;
+        }
+
+        .admin-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-white min-h-screen">
+    <!-- Login Screen -->
+    <div id="login-screen" class="min-h-screen flex items-center justify-center px-6">
+        <div class="glass-effect rounded-lg p-8 neon-border max-w-md w-full">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold neon-text animate-glow mb-2">Admin Panel</h1>
+                <p class="text-gray-400">Sanel Factory</p>
+            </div>
+            
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-300 mb-2">
+                        Nume utilizator
+                    </label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username"
+                        class="w-full bg-dark-card text-white rounded-lg px-4 py-3 border border-dark-border focus:border-neon-cyan focus:outline-none transition-colors duration-300"
+                        required
+                    >
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
+                        Parolă
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password"
+                        class="w-full bg-dark-card text-white rounded-lg px-4 py-3 border border-dark-border focus:border-neon-cyan focus:outline-none transition-colors duration-300"
+                        required
+                    >
+                </div>
+                
+                <button 
+                    type="submit" 
+                    id="login-btn"
+                    class="w-full px-6 py-3 bg-gradient-to-r from-neon-cyan to-neon-purple rounded-lg font-semibold text-black hover:scale-105 transition-transform duration-300"
+                >
+                    Conectează-te
+                </button>
+            </form>
+            
+            <div id="login-error" class="hidden mt-4 p-3 bg-red-600 text-white rounded-lg text-sm">
+                <!-- Error message will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="hidden min-h-screen">
+        <!-- Navigation -->
+        <nav class="glass-effect border-b border-dark-border px-6 py-4">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold neon-text">Admin Panel</h1>
+                    <span class="text-gray-400">Sanel Factory</span>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-300">Bună ziua, <span id="admin-username" class="text-neon-cyan font-semibold"></span></span>
+                    <button 
+                        id="logout-btn"
+                        class="px-4 py-2 glass-effect neon-border rounded-lg hover:bg-red-600 hover:border-red-600 transition-all duration-300"
+                    >
+                        Deconectare
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-6 py-8">
+            <!-- Tabs Navigation -->
+            <div class="flex flex-wrap gap-2 mb-8">
+                <button class="tab-button active px-6 py-3 rounded-lg glass-effect neon-border transition-all duration-300" data-tab="orders">
+                    Comenzi
+                </button>
+                <button class="tab-button px-6 py-3 rounded-lg glass-effect neon-border transition-all duration-300" data-tab="projects">
+                    Proiecte
+                </button>
+                <button class="tab-button px-6 py-3 rounded-lg glass-effect neon-border transition-all duration-300" data-tab="blog">
+                    Blog
+                </button>
+                <button class="tab-button px-6 py-3 rounded-lg glass-effect neon-border transition-all duration-300" data-tab="testimonials">
+                    Testimoniale
+                </button>
+                <button class="tab-button px-6 py-3 rounded-lg glass-effect neon-border transition-all duration-300" data-tab="materials">
+                    Materiale & Prețuri
+                </button>
+                <button class="tab-button px-6 py-3 rounded-lg glass-effect neon-border transition-all duration-300" data-tab="settings">
+                    Setări
+                </button>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="orders-tab" class="tab-content">
+                <div class="glass-effect rounded-lg p-6 neon-border mb-6">
+                    <h2 class="text-2xl font-bold neon-text mb-4">Comenzi Primite</h2>
+                    <p class="text-gray-300 mb-6">Toate comenzile primite prin formularul de cerere ofertă</p>
+                    
+                    <div class="admin-table">
+                        <table class="w-full">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Nume</th>
+                                    <th>Email</th>
+                                    <th>Fișier STL</th>
+                                    <th>Material</th>
+                                    <th>Culoare</th>
+                                    <th>Calitate</th>
+                                    <th>Cantitate</th>
+                                    <th>Acțiuni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body">
+                                <tr>
+                                    <td colspan="9" class="text-center py-8 text-gray-400">Se încarcă comenzile...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Tab -->
+            <div id="projects-tab" class="tab-content hidden">
+                <div class="glass-effect rounded-lg p-6 neon-border mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold neon-text">Gestionare Proiecte</h2>
+                        <button 
+                            id="add-project-btn"
+                            class="px-6 py-3 bg-gradient-to-r from-neon-cyan to-neon-purple rounded-lg font-semibold text-black hover:scale-105 transition-transform duration-300"
+                        >
+                            Adaugă Proiect
+                        </button>
+                    </div>
+                    
+                    <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Projects will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Tab -->
+            <div id="blog-tab" class="tab-content hidden">
+                <div class="glass-effect rounded-lg p-6 neon-border mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold neon-text">Gestionare Blog</h2>
+                        <button 
+                            id="add-article-btn"
+                            class="px-6 py-3 bg-gradient-to-r from-neon-cyan to-neon-purple rounded-lg font-semibold text-black hover:scale-105 transition-transform duration-300"
+                        >
+                            Adaugă Articol
+                        </button>
+                    </div>
+                    
+                    <div id="articles-list" class="space-y-4">
+                        <!-- Articles will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials Tab -->
+            <div id="testimonials-tab" class="tab-content hidden">
+                <div class="glass-effect rounded-lg p-6 neon-border mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold neon-text">Testimoniale Clienți</h2>
+                        <button 
+                            id="add-testimonial-btn"
+                            class="px-6 py-3 bg-gradient-to-r from-neon-cyan to-neon-purple rounded-lg font-semibold text-black hover:scale-105 transition-transform duration-300"
+                        >
+                            Adaugă Testimonial
+                        </button>
+                    </div>
+                    
+                    <div id="testimonials-list" class="space-y-4">
+                        <!-- Testimonials will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materials Tab -->
+            <div id="materials-tab" class="tab-content hidden">
+                <div class="glass-effect rounded-lg p-6 neon-border mb-6">
+                    <h2 class="text-2xl font-bold neon-text mb-4">Materiale și Prețuri</h2>
+                    <p class="text-gray-300 mb-6">Gestionează materialele disponibile și prețurile acestora</p>
+                    
+                    <div id="materials-editor" class="space-y-6">
+                        <!-- Materials editor will be loaded here -->
+                    </div>
+                    
+                    <div class="mt-6">
+                        <button 
+                            id="save-materials-btn"
+                            class="px-6 py-3 bg-gradient-to-r from-neon-cyan to-neon-purple rounded-lg font-semibold text-black hover:scale-105 transition-transform duration-300"
+                        >
+                            Salvează Modificările
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content hidden">
+                <div class="glass-effect rounded-lg p-6 neon-border mb-6">
+                    <h2 class="text-2xl font-bold neon-text mb-4">Setări Generale</h2>
+                    
+                    <form id="settings-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">
+                                    Nume Site
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="site-name"
+                                    class="w-full bg-dark-card text-white rounded-lg px-4 py-3 border border-dark-border focus:border-neon-cyan focus:outline-none transition-colors duration-300"
+                                >
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">
+                                    Logo URL
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="logo-url"
+                                    class="w-full bg-dark-card text-white rounded-lg px-4 py-3 border border-dark-border focus:border-neon-cyan focus:outline-none transition-colors duration-300"
+                                >
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">
+                                Tone of Voice
+                            </label>
+                            <textarea 
+                                id="tone-of-voice"
+                                rows="3"
+                                class="w-full bg-dark-card text-white rounded-lg px-4 py-3 border border-dark-border focus:border-neon-cyan focus:outline-none transition-colors duration-300"
+                                placeholder="Descrie tonul și stilul de comunicare al brandului..."
+                            ></textarea>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">
+                                    Webhook N8N
+                                </label>
+                                <input 
+                                    type="url" 
+                                    id="n8n-webhook"
+                                    class="w-full bg-dark-card text-white rounded-lg px-4 py-3 border border-dark-border focus:border-neon-cyan focus:outline-none transition-colors duration-300"
+                                    placeholder="https://your-n8n-instance.com/webhook/..."
+                                >
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">
+                                    Webhook Chatbot
+                                </label>
+                                <input 
+                                    type="url" 
+                                    id="chatbot-webhook"
+                                    class="w-full bg-dark-card text-white rounded-lg px-4 py-3 border border-dark-border focus:border-neon-cyan focus:outline-none transition-colors duration-300"
+                                    placeholder="https://your-n8n-instance.com/webhook/chatbot"
+                                >
+                            </div>
+                        </div>
+                        
+                        <button 
+                            type="submit"
+                            class="px-6 py-3 bg-gradient-to-r from-neon-cyan to-neon-purple rounded-lg font-semibold text-black hover:scale-105 transition-transform duration-300"
+                        >
+                            Salvează Setările
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Project Modal -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen px-4" style="background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);">
+            <div class="glass-effect rounded-lg neon-border max-w-2xl w-full mx-auto">
+                <div class="flex justify-between items-center p-6 border-b border-dark-border">
+                    <h3 class="text-2xl font-bold neon-text">Adaugă Proiect Nou</h3>
+                    <button id="close-project-modal" class="text-gray-400 hover:text-white transition-colors duration-300">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="add-project-form" class="p-6 space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Titlu Proiect</label>
+                        <input 
+                            type="text" 
+                            name="title"
+                            class="w-full bg-dark-card text-white rounded-lg px-4 py-3 border border-dark-border focus:border-neon-cyan focus:outline-none transition-colors duration-300"
+                            required
+                        >
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Categorie</label>
+                        <select 
+                            name="category"
+                            class="w-full bg-dark-card text-white rounded-lg px-4 py-3 border border-dark-border focus:border-neon-cyan focus:outline-none transition-colors duration-300"
+                            required
+                        >
+                            <option value="3d-printing">Printare 3D</option>
+                            <option value="laser-engraving">Gravură Laser</option>
+                            <option value="prototyping">Prototipare</option>
+                            <option value="custom">Personalizate</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Descriere</label>
+                        <textarea 
+                            name="description"
+                            rows="4"
+                            class="w-full bg-dark-card text-white rounded-lg px-4 py-3 border border-dark-border focus:border-neon-cyan focus:outline-none transition-colors duration-300"
+                            required
+                        ></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Imagine</label>
+                        <input 
+                            type="file" 
+                            name="image"
+                            accept="image/*"
+                            class="w-full bg-dark-card text-white rounded-lg px-4 py-3 border border-dark-border focus:border-neon-cyan focus:outline-none transition-colors duration-300"
+                        >
+                    </div>
+                    
+                    <div class="flex justify-end space-x-4">
+                        <button 
+                            type="button"
+                            id="cancel-project-btn"
+                            class="px-6 py-3 glass-effect neon-border rounded-lg font-semibold text-gray-300 hover:text-white transition-colors duration-300"
+                        >
+                            Anulează
+                        </button>
+                        <button 
+                            type="submit"
+                            class="px-6 py-3 bg-gradient-to-r from-neon-cyan to-neon-purple rounded-lg font-semibold text-black hover:scale-105 transition-transform duration-300"
+                        >
+                            Adaugă Proiect
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>
