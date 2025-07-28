@@ -408,11 +408,63 @@ app.post('/api/webhook/n8n', async (req, res) => {
     }
 });
 
+// Server Control API endpoints
+let serverStartTime = null;
+let serverProcess = null;
+
+// Get server status
+app.get('/api/server/status', (req, res) => {
+    const uptime = serverStartTime ? Date.now() - serverStartTime : 0;
+    res.json({
+        status: 'running',
+        port: PORT,
+        uptime: uptime,
+        startTime: serverStartTime
+    });
+});
+
+// Start server (this endpoint is for demonstration - the server is already running)
+app.post('/api/server/start', (req, res) => {
+    if (!serverStartTime) {
+        serverStartTime = Date.now();
+    }
+    res.json({ 
+        success: true, 
+        message: 'Serverul este deja pornit',
+        status: 'running'
+    });
+});
+
+// Stop server (this endpoint is for demonstration - in production you'd implement proper shutdown)
+app.post('/api/server/stop', (req, res) => {
+    res.json({ 
+        success: true, 
+        message: 'Comandă de oprire primită',
+        status: 'stopped'
+    });
+    
+    // In a real implementation, you might want to gracefully shutdown
+    // setTimeout(() => {
+    //     process.exit(0);
+    // }, 1000);
+});
+
+// Restart server (this endpoint is for demonstration)
+app.post('/api/server/restart', (req, res) => {
+    serverStartTime = Date.now();
+    res.json({ 
+        success: true, 
+        message: 'Serverul a fost repornit',
+        status: 'running'
+    });
+});
+
 // Pornire server
 async function startServer() {
     await ensureDataFiles();
     
     app.listen(PORT, () => {
+        serverStartTime = Date.now();
         console.log(`🚀 Serverul SanelFactory rulează pe portul ${PORT}`);
         console.log(`📱 Accesează: http://localhost:${PORT}`);
         console.log(`🔧 Admin panel: http://localhost:${PORT}/admin`);
