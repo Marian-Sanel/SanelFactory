@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initPriceCalculator();
     initCustomColorToggle();
     initMaterialFilter();
+    initServiceTypeToggle();
 });
 
 // File upload functionality
@@ -303,55 +304,83 @@ function initPriceCalculator() {
 
 // Update price calculator
 function updatePriceCalculator() {
+    const serviceType = document.getElementById('service-type');
     const material = document.getElementById('material');
     const quantity = document.getElementById('quantity');
     const layerHeight = document.getElementById('layer-height');
     const infill = document.getElementById('infill');
+    const laserPower = document.getElementById('laser-power');
+    const laserSpeed = document.getElementById('laser-speed');
     const delivery = document.querySelector('input[name="delivery"]:checked');
     const services = document.querySelectorAll('input[name="services"]:checked');
     
     let materialPrice = 0;
-    let printingPrice = 0;
     let processingPrice = 0;
     let servicesPrice = 0;
     let deliveryPrice = 0;
     
-    // Get model volume (default if no file uploaded)
+    // Get model volume/area (default if no file uploaded)
     const volume = window.modelAnalysis ? window.modelAnalysis.volume : 15;
+    const area = window.modelAnalysis ? window.modelAnalysis.area : 100; // cm²
     const qty = quantity ? parseInt(quantity.value) || 1 : 1;
+    const selectedService = serviceType ? serviceType.value : 'fdm';
     
     // Material cost
     if (material && material.value) {
         const selectedOption = material.options[material.selectedIndex];
-        const pricePerCm3 = parseFloat(selectedOption.dataset.price) || 2;
-        materialPrice = volume * pricePerCm3 * qty;
+        const price = parseFloat(selectedOption.dataset.price) || 2;
+        
+        if (selectedService === 'laser') {
+            // For laser engraving, price is per cm²
+            materialPrice = area * (price / 100) * qty; // Convert to per cm²
+        } else {
+            // For 3D printing, price is per cm³
+            materialPrice = volume * price * qty;
+        }
     }
     
-    // Printing cost (base cost + layer height modifier)
-    printingPrice = 15 * qty; // Base printing cost
-    if (layerHeight && layerHeight.value) {
-        const layerHeightValue = parseFloat(layerHeight.value);
-        if (layerHeightValue <= 0.1) printingPrice *= 1.5; // Fine quality
-        else if (layerHeightValue >= 0.3) printingPrice *= 0.8; // Fast quality
+    // Processing cost based on service type
+    switch (selectedService) {
+        case 'fdm':
+            processingPrice = 15 * qty; // Base FDM printing cost
+            if (layerHeight && layerHeight.value) {
+                const layerHeightValue = parseFloat(layerHeight.value);
+                if (layerHeightValue <= 0.1) processingPrice *= 1.5; // Fine quality
+                else if (layerHeightValue >= 0.3) processingPrice *= 0.8; // Fast quality
+            }
+            // Infill modifier
+            if (infill && infill.value) {
+                const infillValue = parseInt(infill.value);
+                processingPrice *= (1 + infillValue / 200); // More infill = more time
+            }
+            break;
+            
+        case 'sla':
+            processingPrice = 25 * qty; // Base SLA printing cost (higher due to post-processing)
+            break;
+            
+        case 'laser':
+            processingPrice = 10 * qty; // Base laser engraving cost
+            // Laser power and speed modifiers
+            if (laserPower && laserPower.value) {
+                const powerValue = parseInt(laserPower.value);
+                processingPrice *= (1 + powerValue / 500); // Higher power = more cost
+            }
+            if (laserSpeed && laserSpeed.value) {
+                const speedValue = parseInt(laserSpeed.value);
+                processingPrice *= (1.5 - speedValue / 200); // Lower speed = more cost
+            }
+            break;
     }
-    
-    // Infill modifier
-    if (infill && infill.value) {
-        const infillValue = parseInt(infill.value);
-        printingPrice *= (1 + infillValue / 200); // More infill = more time
-    }
-    
-    // Post-processing (included in base price)
-    processingPrice = 0;
     
     // Additional services
     services.forEach(service => {
         switch (service.value) {
             case 'post-processing':
-                servicesPrice += 20 * qty;
+                servicesPrice += selectedService === 'laser' ? 10 * qty : 20 * qty;
                 break;
             case 'painting':
-                servicesPrice += 50 * qty;
+                servicesPrice += selectedService === 'laser' ? 25 * qty : 50 * qty;
                 break;
             case 'assembly':
                 servicesPrice += 30 * qty;
@@ -375,39 +404,55 @@ function updatePriceCalculator() {
     
     // Update display
     const priceMaterial = document.getElementById('price-material');
-    const pricePrinting = document.getElementById('price-printing');
     const priceProcessing = document.getElementById('price-processing');
     const priceServices = document.getElementById('price-services');
     const priceDelivery = document.getElementById('price-delivery');
     const priceTotal = document.getElementById('price-total');
     
     if (priceMaterial) priceMaterial.textContent = formatPrice(materialPrice);
-    if (pricePrinting) pricePrinting.textContent = formatPrice(printingPrice);
     if (priceProcessing) priceProcessing.textContent = formatPrice(processingPrice);
     if (priceServices) priceServices.textContent = formatPrice(servicesPrice);
     if (priceDelivery) priceDelivery.textContent = formatPrice(deliveryPrice);
     
-    const total = materialPrice + printingPrice + processingPrice + servicesPrice + deliveryPrice;
+    const total = materialPrice + processingPrice + servicesPrice + deliveryPrice;
     if (priceTotal) priceTotal.textContent = formatPrice(total);
     
     // Update estimated time
-    updateEstimatedTime(qty, layerHeight ? parseFloat(layerHeight.value) : 0.2);
+    updateEstimatedTime(qty, selectedService, layerHeight ? parseFloat(layerHeight.value) : 0.2);
 }
 
 // Update estimated time
-function updateEstimatedTime(quantity, layerHeight) {
+function updateEstimatedTime(quantity, serviceType, layerHeight) {
     const estimatedTimeEl = document.getElementById('estimated-time');
     const deliveryTimeEl = document.getElementById('delivery-time');
     
-    // Calculate printing time based on quantity and layer height
-    let printingHours = quantity * 8; // Base 8 hours per piece
-    if (layerHeight <= 0.1) printingHours *= 2; // Fine quality takes longer
-    else if (layerHeight >= 0.3) printingHours *= 0.7; // Fast quality is quicker
+    // Calculate processing time based on service type, quantity and parameters
+    let processingHours = 0;
+    
+    switch (serviceType) {
+        case 'fdm':
+            processingHours = quantity * 8; // Base 8 hours per piece for FDM
+            if (layerHeight <= 0.1) processingHours *= 2; // Fine quality takes longer
+            else if (layerHeight >= 0.3) processingHours *= 0.7; // Fast quality is quicker
+            break;
+            
+        case 'sla':
+            processingHours = quantity * 6; // Base 6 hours per piece for SLA (faster printing but needs post-processing)
+            processingHours += quantity * 2; // Add post-processing time
+            break;
+            
+        case 'laser':
+            processingHours = quantity * 2; // Base 2 hours per piece for laser engraving
+            break;
+            
+        default:
+            processingHours = quantity * 8;
+    }
     
     let timeText = '';
-    if (printingHours <= 24) {
+    if (processingHours <= 24) {
         timeText = '24h';
-    } else if (printingHours <= 48) {
+    } else if (processingHours <= 48) {
         timeText = '24-48h';
     } else {
         timeText = '2-3 zile';
@@ -675,6 +720,108 @@ function calculateTriangleArea(view, offset) {
     
     const magnitude = Math.sqrt(cross.x * cross.x + cross.y * cross.y + cross.z * cross.z);
     return magnitude / 2;
+}
+
+// Service type toggle functionality
+function initServiceTypeToggle() {
+    const serviceTypeSelect = document.getElementById('service-type');
+    
+    if (serviceTypeSelect) {
+        serviceTypeSelect.addEventListener('change', function() {
+            updateFormBasedOnService(this.value);
+        });
+        
+        // Initialize with default value
+        updateFormBasedOnService(serviceTypeSelect.value);
+    }
+}
+
+function updateFormBasedOnService(serviceType) {
+    // Hide all service-specific elements
+    const serviceElements = document.querySelectorAll('[class*="service-"]');
+    serviceElements.forEach(element => {
+        element.style.display = 'none';
+    });
+    
+    // Show relevant elements based on service type
+    switch (serviceType) {
+        case 'fdm':
+            // Show FDM materials and settings
+            showServiceElements('.service-fdm');
+            showServiceElements('.service-3d');
+            updateMaterialOptionsForService('fdm');
+            break;
+            
+        case 'sla':
+            // Show SLA materials and settings
+            showServiceElements('.service-sla');
+            showServiceElements('.service-3d');
+            updateMaterialOptionsForService('sla');
+            break;
+            
+        case 'laser':
+            // Show laser materials and settings
+            showServiceElements('.service-laser');
+            updateMaterialOptionsForService('laser');
+            break;
+    }
+    
+    // Update required fields
+    updateRequiredFields(serviceType);
+    
+    // Update price calculator
+    updatePriceCalculator();
+}
+
+function showServiceElements(selector) {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(element => {
+        element.style.display = 'block';
+    });
+}
+
+function updateMaterialOptionsForService(serviceType) {
+    const materialSelect = document.getElementById('material');
+    if (!materialSelect) return;
+    
+    // Hide all optgroups
+    const optgroups = materialSelect.querySelectorAll('optgroup');
+    optgroups.forEach(group => {
+        group.style.display = 'none';
+    });
+    
+    // Show relevant optgroup
+    const relevantGroup = materialSelect.querySelector(`.service-${serviceType}`);
+    if (relevantGroup) {
+        relevantGroup.style.display = 'block';
+    }
+    
+    // Reset selection
+    materialSelect.value = '';
+}
+
+function updateRequiredFields(serviceType) {
+    // Remove required from all service-specific fields
+    const allServiceFields = document.querySelectorAll('[class*="service-"] select, [class*="service-"] input');
+    allServiceFields.forEach(field => {
+        field.removeAttribute('required');
+    });
+    
+    // Add required to active service fields
+    const activeFields = document.querySelectorAll(`.service-${serviceType} select, .service-${serviceType} input`);
+    activeFields.forEach(field => {
+        if (field.type !== 'checkbox') {
+            field.setAttribute('required', 'required');
+        }
+    });
+    
+    // Special handling for 3D printing services
+    if (serviceType === 'fdm' || serviceType === 'sla') {
+        const layerHeightField = document.getElementById('layer-height');
+        if (layerHeightField) {
+            layerHeightField.setAttribute('required', 'required');
+        }
+    }
 }
 
 // Export functions for potential use in other modules

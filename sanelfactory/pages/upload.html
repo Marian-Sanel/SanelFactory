@@ -132,33 +132,15 @@
                     <form class="quote-form" id="quote-form">
                         <h2>Configurează Comanda</h2>
                         
-                        <!-- Technology Selection -->
+                        <!-- Service Type Selection -->
                         <div class="form-section">
-                            <h3>Tehnologie de Printare</h3>
-                            <div class="tech-options">
-                                <label class="tech-option">
-                                    <input type="radio" name="technology" value="fdm" checked>
-                                    <div class="tech-card">
-                                        <div class="tech-icon">
-                                            <i class="fas fa-cube"></i>
-                                        </div>
-                                        <h4>FDM</h4>
-                                        <p>Printare cu filament</p>
-                                        <span class="tech-price">de la 2 RON/cm³</span>
-                                    </div>
-                                </label>
-                                
-                                <label class="tech-option">
-                                    <input type="radio" name="technology" value="sla">
-                                    <div class="tech-card">
-                                        <div class="tech-icon">
-                                            <i class="fas fa-gem"></i>
-                                        </div>
-                                        <h4>SLA</h4>
-                                        <p>Printare cu rășină</p>
-                                        <span class="tech-price">de la 5 RON/cm³</span>
-                                    </div>
-                                </label>
+                            <h3>Tip Serviciu</h3>
+                            <div class="form-group">
+                                <select id="service-type" name="service-type" required>
+                                    <option value="fdm">Printare 3D FDM (Filament)</option>
+                                    <option value="sla">Printare 3D SLA (Rășină)</option>
+                                    <option value="laser">Gravură Laser</option>
+                                </select>
                             </div>
                         </div>
 
@@ -168,7 +150,7 @@
                             <div class="form-group">
                                 <select id="material" name="material" required>
                                     <option value="">Selectează materialul</option>
-                                    <optgroup label="FDM Materials">
+                                    <optgroup label="FDM Materials" class="service-fdm">
                                         <option value="pla" data-price="2.0">PLA - 2 RON/cm³</option>
                                         <option value="petg" data-price="2.5">PETG - 2.5 RON/cm³</option>
                                         <option value="abs" data-price="2.2">ABS - 2.2 RON/cm³</option>
@@ -176,12 +158,20 @@
                                         <option value="wood" data-price="3.5">Wood Fill - 3.5 RON/cm³</option>
                                         <option value="carbon" data-price="6.0">Carbon Fiber - 6 RON/cm³</option>
                                     </optgroup>
-                                    <optgroup label="SLA Materials">
+                                    <optgroup label="SLA Materials" class="service-sla">
                                         <option value="resin-standard" data-price="5.0">Rășină Standard - 5 RON/cm³</option>
                                         <option value="resin-tough" data-price="7.0">Rășină Tough - 7 RON/cm³</option>
                                         <option value="resin-flexible" data-price="8.0">Rășină Flexibilă - 8 RON/cm³</option>
                                         <option value="resin-transparent" data-price="6.0">Rășină Transparentă - 6 RON/cm³</option>
                                         <option value="resin-castable" data-price="12.0">Rășină Castabilă - 12 RON/cm³</option>
+                                    </optgroup>
+                                    <optgroup label="Laser Materials" class="service-laser">
+                                        <option value="wood-3mm" data-price="1500">Lemn 3mm - 15 RON/bucată</option>
+                                        <option value="wood-6mm" data-price="2500">Lemn 6mm - 25 RON/bucată</option>
+                                        <option value="plexiglas-3mm" data-price="2500">Plexiglas 3mm - 25 RON/bucată</option>
+                                        <option value="plexiglas-6mm" data-price="4000">Plexiglas 6mm - 40 RON/bucată</option>
+                                        <option value="leather" data-price="3000">Piele - 30 RON/bucată</option>
+                                        <option value="cardboard" data-price="500">Carton - 5 RON/bucată</option>
                                     </optgroup>
                                 </select>
                             </div>
@@ -234,9 +224,10 @@
                         <div class="form-section">
                             <h3>Calitate & Setări</h3>
                             <div class="settings-grid">
-                                <div class="form-group">
+                                <!-- 3D Printing Settings -->
+                                <div class="form-group service-3d">
                                     <label for="layer-height">Înălțime Layer</label>
-                                    <select id="layer-height" name="layer-height" required>
+                                    <select id="layer-height" name="layer-height">
                                         <option value="0.1">0.1mm (Foarte fină)</option>
                                         <option value="0.15">0.15mm (Fină)</option>
                                         <option value="0.2" selected>0.2mm (Standard)</option>
@@ -244,9 +235,9 @@
                                     </select>
                                 </div>
                                 
-                                <div class="form-group">
+                                <div class="form-group service-fdm">
                                     <label for="infill">Densitate Umplutură</label>
-                                    <select id="infill" name="infill" required>
+                                    <select id="infill" name="infill">
                                         <option value="10">10% (Foarte ușoară)</option>
                                         <option value="15" selected>15% (Standard)</option>
                                         <option value="20">20% (Rezistentă)</option>
@@ -255,13 +246,23 @@
                                     </select>
                                 </div>
                                 
-                                <div class="form-group">
-                                    <label for="supports">Suporturi</label>
-                                    <select id="supports" name="supports" required>
-                                        <option value="auto" selected>Automat</option>
-                                        <option value="minimal">Minimale</option>
-                                        <option value="everywhere">Peste tot</option>
-                                        <option value="none">Fără suporturi</option>
+                                <!-- Laser Settings -->
+                                <div class="form-group service-laser" style="display: none;">
+                                    <label for="laser-power">Putere Laser (%)</label>
+                                    <select id="laser-power" name="laser-power">
+                                        <option value="50">50% (Ușoară)</option>
+                                        <option value="75" selected>75% (Standard)</option>
+                                        <option value="100">100% (Maximă)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group service-laser" style="display: none;">
+                                    <label for="laser-speed">Viteză Gravare (%)</label>
+                                    <select id="laser-speed" name="laser-speed">
+                                        <option value="25">25% (Foarte lentă)</option>
+                                        <option value="50" selected>50% (Standard)</option>
+                                        <option value="75">75% (Rapidă)</option>
+                                        <option value="100">100% (Foarte rapidă)</option>
                                     </select>
                                 </div>
                                 
@@ -405,11 +406,7 @@
                     <span class="value" id="price-material">0 RON</span>
                 </div>
                 <div class="price-item">
-                    <span class="label">Printare:</span>
-                    <span class="value" id="price-printing">0 RON</span>
-                </div>
-                <div class="price-item">
-                    <span class="label">Post-procesare:</span>
+                    <span class="label">Procesare:</span>
                     <span class="value" id="price-processing">0 RON</span>
                 </div>
                 <div class="price-item">

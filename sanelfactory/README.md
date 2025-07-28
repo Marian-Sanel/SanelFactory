@@ -1,289 +1,244 @@
-# Sanel Factory - Website Printare 3D
+# 🏭 Sanel Factory - Website Complet
 
-Un website modern și profesional pentru o companie de printare 3D, cu temă dark, efecte frosted glass și funcționalități avansate.
+Website modern pentru servicii de printare 3D și gravură laser cu design dark mode, accente neon și funcționalități avansate.
 
-## 🚀 Caracteristici
+## 🚀 Funcționalități Principale
 
-### Design
-- **Temă Dark Modern**: Background negru cu efecte de sticlă mată (frosted glass)
-- **Accent Neon Coral**: Culoare principală #ff6b6b pentru butoane și hover effects
-- **Tipografie Sans-serif**: Font Inter pentru aspect modern și profesional
-- **Margini Rotunjite**: Design minimalist cu colțuri rotunjite
-- **Responsive Design**: Optimizat pentru desktop, tablet și mobile
+### ✨ Pagini și Secțiuni
+- **Pagina Principală** - Design modern cu hero section, servicii, testimoniale
+- **Blog** - Sistem complet de blog cu căutare și filtrare
+- **Proiecte** - Galerie cu proiectele realizate
+- **Upload STL** - Calculator de prețuri și formular de comandă
+- **Admin Panel** - Panou complet de administrare
 
-### Funcționalități Principale
+### 🔧 Servicii Suportate
+- **Printare 3D FDM** - Filamente PLA, PETG, ABS, TPU, etc.
+- **Printare 3D SLA** - Rășini standard, tough, flexibile
+- **Gravură Laser** - Lemn, plexiglas, piele, carton
 
-#### 🏠 Homepage
-- Hero section cu animații CSS
-- Prezentare servicii (FDM, SLA, CAD, Gravură Laser)
-- Testimoniale clienți
-- FAQ interactiv
-- Formular de contact
+### 🤖 Integrări Avansate
+- **N8N Automation** - Automatizare publicare blog și procese
+- **Chatbot AI** - Asistent virtual cu OpenAI
+- **Admin Panel** - Gestionare completă conținut
+- **Calculator Prețuri** - Estimare în timp real
 
-#### 📤 Upload STL & Calculator Preț
-- **Drag & Drop Upload**: Încărcare fișiere prin drag & drop sau click
-- **Formate Acceptate**: STL, OBJ, 3MF, STEP
-- **Analiză Automată**: Calculează dimensiuni, volum și complexitate
-- **Calculator Preț în Timp Real**: Actualizare automată în funcție de opțiuni
-- **Formular Complet**: Tehnologie, material, culoare, calitate, servicii extra
-- **Estimare Timp**: Calculează timpul de printare și livrare
+## 📦 Instalare și Configurare
 
-#### 🤖 Chatbot AI
-- **Răspunsuri Inteligente**: Procesează întrebări despre printare 3D
-- **Categorii Multiple**: Prețuri, materiale, tehnologii, timpi de livrare
-- **Interfață Modernă**: Design consistent cu tema site-ului
-- **Indicator Typing**: Animație realistă de scriere
+### Cerințe Sistem
+- Node.js 16+ 
+- NPM sau Yarn
+- Browser modern (Chrome, Firefox, Safari, Edge)
 
-#### 📱 Funcționalități Mobile
-- **Navigation Responsive**: Meniu hamburger pentru mobile
-- **Touch Optimized**: Toate elementele sunt optimizate pentru touch
-- **Calculator Adaptat**: Se transformă în layout vertical pe mobile
+### Instalare Rapidă
 
-### 🛠 Tehnologii Utilizate
+```bash
+# Clonează repository-ul
+git clone <repository-url>
+cd sanelfactory
 
-- **HTML5**: Structură semantică și accesibilă
-- **CSS3**: 
-  - Custom Properties (CSS Variables)
-  - Flexbox și CSS Grid
-  - Backdrop-filter pentru efecte glass
-  - Animații și tranziții moderne
-- **JavaScript ES6+**:
-  - Module pattern
-  - Async/await pentru operații asincrone
-  - Local Storage pentru persistența datelor
-  - Intersection Observer pentru animații
-- **Font Awesome**: Iconuri vectoriale
-- **Google Fonts**: Tipografia Inter
+# Instalează dependențele
+npm install
 
-## 📁 Structura Proiectului
+# Pornește server-ul backend
+npm run server
+
+# În alt terminal, pornește server-ul de dezvoltare (opțional)
+npm run dev
+
+# Sau pornește ambele simultan
+npm run dev-full
+```
+
+### Accesare
+- **Website Principal**: http://localhost:3000
+- **Admin Panel**: http://localhost:3000/admin
+- **Blog**: http://localhost:3000/blog
+- **Proiecte**: http://localhost:3000/proiecte
+
+## 🔐 Admin Panel
+
+### Credențiale de Acces
+- **Username**: `Marian`
+- **Parolă**: `Mingeci2`
+
+### Funcționalități Admin
+1. **Comenzi** - Vizualizare toate comenzile primite
+2. **Proiecte** - Upload și gestionare proiecte pentru galerie
+3. **Blog** - Adăugare și gestionare articole
+4. **Testimoniale** - Gestionare comentarii clienți
+5. **Materiale & Prețuri** - Configurare materiale și prețuri
+6. **Setări** - Configurare generală și webhook-uri N8N
+
+## 🤖 Integrarea N8N
+
+### Configurare Rapidă N8N
+
+```bash
+# Instalare N8N global
+npm install n8n -g
+
+# Pornire N8N
+n8n start
+```
+
+Accesează N8N la: http://localhost:5678
+
+### Webhook-uri Configurate
+- **Blog Automation**: `http://localhost:5678/webhook/blog-publish`
+- **Chatbot AI**: `http://localhost:5678/webhook/chatbot`
+
+### Configurare în Admin Panel
+1. Accesează Admin Panel → Setări
+2. Completează URL-urile webhook-urilor N8N
+3. Testează funcționarea din interfața N8N
+
+Documentație completă: [INTEGRARI_N8N.md](./INTEGRARI_N8N.md)
+
+## 📊 Structura Proiectului
 
 ```
 sanelfactory/
-├── index.html                 # Homepage principal
-├── css/
-│   ├── styles.css            # Stiluri principale
-│   └── upload.css            # Stiluri pentru pagina upload
-├── js/
-│   ├── main.js               # Funcționalități principale
-│   ├── upload.js             # Logica upload și calculator
-│   └── chatbot.js            # Chatbot AI
-├── pages/
-│   ├── upload.html           # Pagina upload STL
-│   ├── servicii.html         # Pagina servicii detaliate
-│   ├── blog.html             # Blog cu articole SEO
-│   └── contact.html          # Pagina contact
-├── images/                   # Imagini și logo-uri
-├── api/                      # Endpoint-uri pentru integrări
-└── README.md                 # Documentația proiectului
+├── server.js                 # Server Node.js/Express
+├── package.json              # Dependențe și scripturi
+├── index.html                # Pagina principală
+├── INTEGRARI_N8N.md          # Ghid integrare N8N
+├── pages/                    # Pagini suplimentare
+│   ├── blog.html            # Pagina blog
+│   ├── proiecte.html        # Galerie proiecte
+│   ├── admin.html           # Panou administrare
+│   └── upload.html          # Upload STL și calculator
+├── js/                       # JavaScript
+│   ├── main.js              # Funcționalități principale
+│   ├── blog.js              # Logica blog
+│   ├── proiecte.js          # Logica galerie proiecte
+│   ├── admin.js             # Logica admin panel
+│   └── upload.js            # Calculator prețuri și upload
+├── css/                      # Stiluri CSS
+│   ├── styles.css           # Stiluri principale
+│   └── upload.css           # Stiluri pagina upload
+├── images/                   # Imagini și resurse
+├── data/                     # Fișiere JSON (create automat)
+│   ├── orders.json          # Comenzi primite
+│   ├── projects.json        # Proiecte galerie
+│   ├── blog.json            # Articole blog
+│   ├── testimonials.json    # Testimoniale
+│   ├── materials.json       # Materiale și prețuri
+│   └── settings.json        # Setări generale
+└── uploads/                  # Fișiere încărcate
+    ├── projects/            # Imagini proiecte
+    └── stl/                 # Fișiere STL
 ```
 
-## 🎨 Ghid de Culori
-
-```css
-/* Culori principale */
---bg-primary: #0a0a0a;        /* Background principal */
---bg-secondary: #1a1a1a;      /* Background secundar */
---bg-glass: rgba(255, 255, 255, 0.05);  /* Efecte glass */
-
-/* Text */
---text-primary: #ffffff;       /* Text principal */
---text-secondary: #b0b0b0;     /* Text secundar */
---text-muted: #808080;         /* Text estompat */
-
-/* Accent */
---accent-coral: #ff6b6b;       /* Coral neon principal */
---accent-green: #00ff88;       /* Verde neon secundar */
---accent-blue: #4dabf7;        /* Albastru accent */
-```
-
-## 🚦 Instalare și Configurare
-
-### 1. Clonează Repository-ul
-```bash
-git clone [repository-url]
-cd sanelfactory
-```
-
-### 2. Configurare Server Local
-Pentru dezvoltare locală, folosește un server HTTP simplu:
+## 🛠️ Comenzi Disponibile
 
 ```bash
-# Cu Python 3
-python -m http.server 8000
+# Dezvoltare
+npm run server          # Pornește doar server-ul backend
+npm run dev            # Pornește server-ul static pentru frontend
+npm run dev-full       # Pornește ambele servere simultan
+npm start              # Alias pentru npm run server
 
-# Cu Node.js (http-server)
-npx http-server -p 8000
+# Build și Optimizare
+npm run build          # Build pentru producție
+npm run minify-css     # Minifică fișierele CSS
+npm run minify-js      # Minifică fișierele JavaScript
+npm run optimize-images # Optimizează imaginile
 
-# Cu PHP
-php -S localhost:8000
+# Calitate Cod
+npm run lint           # Verifică JavaScript cu ESLint
+npm run format         # Formatează codul cu Prettier
+npm run validate-html  # Validează HTML-ul
 ```
 
-### 3. Accesează Site-ul
-Deschide `http://localhost:8000` în browser.
+## 🎨 Design și Stilizare
 
-## ⚙️ Configurare pentru Producție
+### Tema Principală
+- **Background**: Dark mode (#0a0a0a)
+- **Accente**: Neon cyan (#00ffff), purple (#bf00ff)
+- **Efecte**: Glass effect, backdrop blur, neon glow
+- **Typography**: Inter font family
+- **Responsive**: Complet responsive pentru toate dispozitivele
 
-### 1. Actualizează Date de Contact
-În fișierele HTML, înlocuiește:
-- `+40 XXX XXX XXX` cu numărul real de telefon
-- `contact@sanelfactory.ro` cu email-ul real
-- Adresa completă a companiei
+### Componente Personalizate
+- Carduri cu efect de sticlă mată
+- Butoane cu gradient neon
+- Animații smooth și hover effects
+- Loading states și skeleton screens
+- Notificări toast personalizate
 
-### 2. Configurare Integrări
+## 🔧 Configurare Avansată
 
-#### n8n Automation
-Pentru automatizarea formularelor și blog-ului:
-```javascript
-// În main.js și upload.js, înlocuiește URL-urile cu endpoint-urile n8n
-const N8N_WEBHOOK_URL = 'https://your-n8n-instance.com/webhook/sanel-factory';
-```
+### Materiale și Prețuri
+Editează din Admin Panel → Materiale & Prețuri sau direct în `data/materials.json`:
 
-#### Calculator Preț Extern
-Pentru integrarea cu AutoQuote3D sau alt serviciu:
-```html
-<!-- În upload.html -->
-<iframe src="https://autoquote3d.com/embed/your-key" 
-        width="100%" height="600"></iframe>
-```
-
-#### Analytics
-Adaugă Google Analytics sau alt serviciu:
-```html
-<!-- În <head> -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-```
-
-### 3. Optimizare SEO
-
-#### Meta Tags
-Toate paginile au meta tags complete pentru SEO.
-
-#### JSON-LD
-Schema.org markup pentru business local inclus în homepage.
-
-#### Sitemap
-Creează un sitemap.xml:
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://sanelfactory.ro/</loc>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://sanelfactory.ro/pages/upload.html</loc>
-    <priority>0.9</priority>
-  </url>
-</urlset>
-```
-
-## 🔧 Customizare
-
-### Modificare Culori
-Editează variabilele CSS în `css/styles.css`:
-```css
-:root {
-  --accent-coral: #your-color;  /* Schimbă culoarea accent */
-  --bg-primary: #your-bg;       /* Schimbă background-ul */
+```json
+{
+  "fdm": {
+    "PLA": { "price": 25, "colors": ["Alb", "Negru", "Roșu"] }
+  },
+  "sla": {
+    "Standard Resin": { "price": 80, "colors": ["Gri", "Negru"] }
+  },
+  "laser": {
+    "Lemn 3mm": { "price": 15, "colors": ["Natural"] }
+  }
 }
 ```
 
-### Adăugare Materiale Noi
-În `pages/upload.html`, adaugă opțiuni noi în select:
-```html
-<option value="new-material" data-price="3.0">Material Nou - 3 RON/cm³</option>
+### Webhook-uri N8N
+Configurează în Admin Panel → Setări:
+- **N8N Webhook**: Pentru automatizare blog
+- **Chatbot Webhook**: Pentru chatbot AI
+
+### Customizare Setări
+```json
+{
+  "siteName": "Sanel Factory",
+  "logo": "/images/logo.png",
+  "toneOfVoice": "profesional și prietenos",
+  "webhooks": {
+    "n8n": "http://localhost:5678/webhook/blog-publish",
+    "chatbot": "http://localhost:5678/webhook/chatbot"
+  }
+}
 ```
 
-Și actualizează logica în `js/upload.js`.
+## 🚀 Deployment
 
-### Modificare Răspunsuri Chatbot
-În `js/chatbot.js`, editează funcția `processMessage()` pentru a adăuga răspunsuri noi.
+### Producție
+1. Rulează `npm run build` pentru optimizare
+2. Configurează variabilele de mediu
+3. Deploy pe server cu Node.js support
+4. Configurează proxy reverse (nginx/apache)
+5. Activează HTTPS pentru securitate
 
-## 📊 Funcționalități Avansate
-
-### Auto-save Formulare
-Formularele salvează automat progresul în localStorage.
-
-### Analiză STL Client-side
-Parser basic STL pentru calcularea dimensiunilor și volumului.
-
-### Sistem Notificări
-Notificări toast pentru feedback utilizator.
-
-### Performance Monitoring
-Monitorizare timp de încărcare și erori JavaScript.
-
-## 🌐 Integrări Recomandate
-
-### Backend Services
-- **n8n**: Automatizare workflow-uri și procesare formulare
-- **Stripe**: Procesare plăți online
-- **EmailJS**: Trimitere email-uri fără backend
-- **Cloudflare**: CDN și protecție
-
-### Analytics și Marketing
-- **Google Analytics 4**: Tracking utilizatori
-- **Google Search Console**: Monitorizare SEO
-- **Facebook Pixel**: Marketing pe social media
-- **Hotjar**: Heatmaps și înregistrări sesiuni
-
-### Hosting Recomandat
-- **HostAge**: Hosting România (menționat în brief)
-- **Netlify**: Hosting static cu CI/CD
-- **Vercel**: Hosting cu preview deployments
-- **Cloudflare Pages**: Hosting cu CDN global
-
-## 🔐 Securitate
-
-### Validare Formulare
-- Validare client-side și server-side
-- Sanitizare input-uri
-- Rate limiting pentru formulare
-
-### Upload Fișiere
-- Validare tip fișier
-- Limitare dimensiune (50MB)
-- Scanare malware recomandat
-
-### Headers Securitate
-```apache
-# .htaccess
-Header always set X-Frame-Options DENY
-Header always set X-Content-Type-Options nosniff
-Header always set Referrer-Policy strict-origin-when-cross-origin
+### Variabile de Mediu
+```bash
+PORT=3000                    # Port server
+NODE_ENV=production          # Mediu producție
+SESSION_SECRET=your-secret   # Secret pentru sesiuni
 ```
 
-## 📱 PWA (Progressive Web App)
+## 📞 Suport și Contact
 
-Site-ul este pregătit pentru PWA cu:
-- Service Worker registration
-- Manifest.json pentru instalare
-- Offline functionality
+### Pentru Dezvoltatori
+- Documentația completă în fișierele markdown
+- Comentarii extensive în cod
+- Structură modulară și extensibilă
+- API RESTful pentru toate operațiunile
 
-## 🐛 Debugging
-
-### Console Logs
-Site-ul loghează informații utile în consolă:
-- Timp de încărcare pagină
-- Erori JavaScript
-- Analytics chatbot
-
-### Local Storage
-Datele salvate în localStorage:
-- `chatbot_welcomed`: Flag pentru mesaj welcome
-- `form_*`: Date formulare auto-salvate
-
-## 📞 Support
-
-Pentru întrebări tehnice sau customizări:
-- Documentația este în acest README
-- Comentariile din cod explică funcționalitățile
-- Structura modulară permite modificări ușoare
+### Pentru Utilizatori Non-Tehnici
+- Interface intuitivă în Admin Panel
+- Configurare prin interfață grafică
+- Backup automat al datelor
+- Instrucțiuni pas cu pas în documentație
 
 ## 📄 Licență
 
-Acest proiect este dezvoltat pentru Sanel Factory. Toate drepturile rezervate.
+MIT License - Vezi fișierul LICENSE pentru detalii.
 
 ---
 
-**Dezvoltat cu ❤️ pentru comunitatea maker din România**
+**Dezvoltat pentru Sanel Factory** - Website modern pentru servicii de printare 3D și gravură laser.
+
+*Ultima actualizare: Decembrie 2024*
