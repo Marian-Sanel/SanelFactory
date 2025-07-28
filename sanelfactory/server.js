@@ -408,6 +408,36 @@ app.post('/api/webhook/n8n', async (req, res) => {
     }
 });
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+    res.json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        port: PORT 
+    });
+});
+
+// Server control endpoints (admin only)
+app.post('/api/admin/server/start', requireAuth, (req, res) => {
+    // In a real implementation, this would start the server process
+    // For now, we'll just return a success message since the server is already running
+    res.json({ 
+        success: true, 
+        message: 'Server is already running',
+        port: PORT 
+    });
+});
+
+app.post('/api/admin/server/stop', requireAuth, (req, res) => {
+    // In a real implementation, this would stop the server process
+    // For safety, we'll not actually stop the server but return a message
+    res.json({ 
+        success: true, 
+        message: 'Server stop command received. Please stop manually for safety.',
+        warning: 'Automatic server stop is disabled for safety reasons.'
+    });
+});
+
 // Pornire server
 async function startServer() {
     await ensureDataFiles();
