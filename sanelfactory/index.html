@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanel Factory - Printare 3D Profesională | FDM, SLA, CAD, Gravură Laser</title>
+    <meta name="description" content="Sanel Factory oferă servicii profesionale de printare 3D (FDM, SLA), modelare CAD și gravură laser. Calitate superioară, livrare rapidă în România.">
+    <meta name="keywords" content="printare 3D, FDM, SLA, CAD, gravură laser, PLA, PETG, ABS, resin, România">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Sanel Factory - Printare 3D Profesională">
+    <meta property="og:description" content="Servicii profesionale de printare 3D, modelare CAD și gravură laser. Calitate superioară, livrare rapidă.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sanelfactory.ro">
+    <meta property="og:image" content="https://sanelfactory.ro/images/og-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Sanel Factory",
+        "description": "Servicii profesionale de printare 3D, modelare CAD și gravură laser",
+        "url": "https://sanelfactory.ro",
+        "telephone": "+40-XXX-XXX-XXX",
+        "email": "contact@sanelfactory.ro",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "RO",
+            "addressLocality": "București"
+        },
+        "openingHours": "Mo-Fr 09:00-18:00",
+        "priceRange": "$$",
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Servicii Printare 3D",
+            "itemListElement": [
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Printare 3D FDM"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Printare 3D SLA"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Modelare CAD"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Gravură Laser"
+                    }
+                }
+            ]
+        }
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="images/logo.svg" alt="Sanel Factory Logo" class="logo">
+                <span class="logo-text">Sanel Factory</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link">Acasă</a>
+                <a href="#servicii" class="nav-link">Servicii</a>
+                <a href="pages/upload.html" class="nav-link">Upload STL</a>
+                <a href="pages/blog.html" class="nav-link">Blog</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="pages/upload.html" class="nav-cta">Cere Ofertă</a>
+            </div>
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Transformăm <span class="highlight">Ideile</span> în 
+                    <span class="highlight">Realitate 3D</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Servicii profesionale de printare 3D, modelare CAD și gravură laser. 
+                    De la prototip la producție - calitate superioară, livrare rapidă.
+                </p>
+                <div class="hero-buttons">
+                    <a href="pages/upload.html" class="btn btn-primary">
+                        <i class="fas fa-upload"></i>
+                        Încarcă Fișier STL
+                    </a>
+                    <a href="#servicii" class="btn btn-secondary">
+                        <i class="fas fa-info-circle"></i>
+                        Vezi Serviciile
+                    </a>
+                </div>
+                <div class="hero-features">
+                    <div class="feature">
+                        <i class="fas fa-clock"></i>
+                        <span>Livrare 24-48h</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Calitate Garantată</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-tools"></i>
+                        <span>Echipamente Profesionale</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-3d-model">
+                    <div class="model-container">
+                        <div class="floating-elements">
+                            <div class="element element-1"></div>
+                            <div class="element element-2"></div>
+                            <div class="element element-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Overview -->
+    <section id="servicii" class="services-overview">
+        <div class="container">
+            <div class="section-header">
+                <h2>Serviciile Noastre</h2>
+                <p>Tehnologii avansate pentru toate nevoile tale de printare și design</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h3>Printare 3D FDM</h3>
+                    <p>Printare cu filament pentru prototipuri și piese funcționale. Materiale: PLA, PETG, ABS, WOOD, Carbon Fiber.</p>
+                    <ul class="service-features">
+                        <li>Precizie înaltă</li>
+                        <li>Multiple materiale</li>
+                        <li>Piese mari până la 300x300x400mm</li>
+                    </ul>
+                    <a href="pages/servicii.html#fdm" class="service-link">Află mai mult <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3>Printare 3D SLA</h3>
+                    <p>Printare cu rășină pentru detalii fine și finisaj superior. Perfect pentru bijuterii, miniaturi și piese de precizie.</p>
+                    <ul class="service-features">
+                        <li>Rezoluție 0.01mm</li>
+                        <li>Finisaj smooth</li>
+                        <li>Rășini transparente și colorate</li>
+                    </ul>
+                    <a href="pages/servicii.html#sla" class="service-link">Află mai mult <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-drafting-compass"></i>
+                    </div>
+                    <h3>Modelare CAD</h3>
+                    <p>Servicii complete de design 3D și inginerie. De la concept la fișier 3D gata de printare.</p>
+                    <ul class="service-features">
+                        <li>Design de la zero</li>
+                        <li>Optimizare pentru printare</li>
+                        <li>Documentație tehnică</li>
+                    </ul>
+                    <a href="pages/servicii.html#cad" class="service-link">Află mai mult <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-burn"></i>
+                    </div>
+                    <h3>Gravură Laser</h3>
+                    <p>Gravură și tăiere laser pe lemn, acrilic, piele și alte materiale. Personalizare și producție în serie.</p>
+                    <ul class="service-features">
+                        <li>Multiple materiale</li>
+                        <li>Precizie maximă</li>
+                        <li>Design personalizat</li>
+                    </ul>
+                    <a href="pages/servicii.html#laser" class="service-link">Află mai mult <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote Calculator -->
+    <section class="quote-section">
+        <div class="container">
+            <div class="quote-container">
+                <div class="quote-content">
+                    <h2>Calculează Prețul Instant</h2>
+                    <p>Încarcă fișierul STL și primește o estimare de preț în timp real</p>
+                    <a href="pages/upload.html" class="btn btn-primary btn-large">
+                        <i class="fas fa-calculator"></i>
+                        Calculează Prețul
+                    </a>
+                </div>
+                <div class="quote-visual">
+                    <div class="calculator-preview">
+                        <div class="calc-screen">
+                            <div class="calc-line">Material: PLA</div>
+                            <div class="calc-line">Volum: 15.2 cm³</div>
+                            <div class="calc-line">Timp: 3h 45min</div>
+                            <div class="calc-price">Preț: 45 RON</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Ce Spun Clienții Noștri</h2>
+                <p>Încrederea lor este cea mai bună recomandare</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"Calitate excepțională și livrare foarte rapidă. Am folosit serviciile lor pentru prototipuri și rezultatul a depășit așteptările."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="images/client1.jpg" alt="Client 1">
+                        <div class="author-info">
+                            <h4>Andrei Popescu</h4>
+                            <span>Inginer Product Design</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"Profesionalism maxim! M-au ajutat să optimizez designul pentru printare și rezultatul final a fost perfect."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="images/client2.jpg" alt="Client 2">
+                        <div class="author-info">
+                            <h4>Maria Ionescu</h4>
+                            <span>Arhitect</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"Cea mai bună alegere pentru printare SLA. Detaliile sunt incredibile și prețurile foarte competitive."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="images/client3.jpg" alt="Client 3">
+                        <div class="author-info">
+                            <h4>Radu Gheorghe</h4>
+                            <span>Designer Bijuterii</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Întrebări Frecvente</h2>
+                <p>Răspunsuri la cele mai comune întrebări</p>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Cât durează să printez o piesă?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Timpul de printare depinde de dimensiunea și complexitatea piesei. În general, piesele mici (sub 50cm³) sunt gata în 24h, iar cele mai mari în 48-72h. Pentru comenzi urgente oferim serviciu express.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Ce formate de fișiere acceptați?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Acceptăm fișiere STL, OBJ, 3MF și STEP. Pentru rezultate optime, recomandăm STL cu rezoluție înaltă (0.1-0.2mm). Dacă ai alte formate, ne poți contacta pentru conversie.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Ce materiale aveți disponibile?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Pentru FDM: PLA, PETG, ABS, TPU, Wood Fill, Carbon Fiber. Pentru SLA: rășini standard, transparente, flexibile și castabile. Toate materialele sunt de calitate premium.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Cum calculați prețul?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Prețul se calculează în funcție de volumul materialului, timpul de printare, complexitatea piesei și materialul ales. Folosiți calculatorul nostru online pentru o estimare instantanee.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Oferiți servicii de design/modelare?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Da! Echipa noastră de designeri poate crea modele 3D de la zero sau poate optimiza designuri existente pentru printare. Contactați-ne pentru detalii și prețuri.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Cum se face livrarea?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Livrăm prin curier în toată România (24-48h) sau poți ridica personal din atelier. Pentru București oferim și livrare în aceeași zi pentru comenzi urgente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Contactează-ne</h2>
+                <p>Suntem aici să te ajutăm cu orice întrebare sau proiect</p>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Email</h3>
+                            <p>contact@sanelfactory.ro</p>
+                            <p>comenzi@sanelfactory.ro</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Telefon</h3>
+                            <p>+40 XXX XXX XXX</p>
+                            <p>Luni - Vineri: 09:00 - 18:00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Adresă</h3>
+                            <p>Str. Exemplu Nr. 123</p>
+                            <p>București, România</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Program</h3>
+                            <p>Luni - Vineri: 09:00 - 18:00</p>
+                            <p>Sâmbătă: 10:00 - 14:00</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <form class="contact-form" id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Nume Complet</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Telefon</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subiect</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Selectează subiectul</option>
+                            <option value="oferta">Cerere ofertă</option>
+                            <option value="informații">Informații generale</option>
+                            <option value="suport">Suport tehnic</option>
+                            <option value="colaborare">Colaborare</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Mesaj</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Trimite Mesajul
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="images/logo.svg" alt="Sanel Factory Logo">
+                        <span>Sanel Factory</span>
+                    </div>
+                    <p>Transformăm ideile în realitate prin tehnologii avansate de printare 3D și design.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Servicii</h3>
+                    <ul>
+                        <li><a href="pages/servicii.html#fdm">Printare 3D FDM</a></li>
+                        <li><a href="pages/servicii.html#sla">Printare 3D SLA</a></li>
+                        <li><a href="pages/servicii.html#cad">Modelare CAD</a></li>
+                        <li><a href="pages/servicii.html#laser">Gravură Laser</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Informații</h3>
+                    <ul>
+                        <li><a href="pages/despre.html">Despre Noi</a></li>
+                        <li><a href="pages/blog.html">Blog</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="pages/termeni.html">Termeni și Condiții</a></li>
+                        <li><a href="pages/gdpr.html">Politica de Confidențialitate</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@sanelfactory.ro</li>
+                        <li><i class="fas fa-phone"></i> +40 XXX XXX XXX</li>
+                        <li><i class="fas fa-map-marker-alt"></i> București, România</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Sanel Factory. Toate drepturile rezervate.</p>
+                <p>Dezvoltat cu ❤️ pentru comunitatea maker din România</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget" id="chatbot-widget">
+        <div class="chatbot-button" id="chatbot-button">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chatbot-window" id="chatbot-window">
+            <div class="chatbot-header">
+                <h4>Asistent Virtual</h4>
+                <button class="chatbot-close" id="chatbot-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="message bot-message">
+                    Salut! Sunt asistentul virtual Sanel Factory. Cu ce te pot ajuta?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Scrie mesajul tău...">
+                <button id="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>
