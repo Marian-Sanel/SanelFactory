@@ -135,6 +135,9 @@
                     <button onclick="showSection('config')" class="nav-btn px-4 py-2 rounded-lg transition-colors">
                         Configurare
                     </button>
+                    <button onclick="showSection('server')" class="nav-btn px-4 py-2 rounded-lg transition-colors">
+                        Control Server
+                    </button>
                 </div>
             </div>
         </nav>
@@ -323,6 +326,97 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Server Control Section -->
+            <div id="serverSection" class="section hidden">
+                <h2 class="text-3xl font-bold mb-8 neon-text text-neon-pink">Control Server</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Server Status -->
+                    <div class="glass-effect rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4 text-neon-blue">Status Server</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-dark-secondary/50 rounded-lg">
+                                <span class="text-gray-300">Status:</span>
+                                <span id="serverStatus" class="px-3 py-1 rounded-full text-sm font-semibold bg-green-500/20 text-green-400">
+                                    Online
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-dark-secondary/50 rounded-lg">
+                                <span class="text-gray-300">Port:</span>
+                                <span class="text-neon-blue font-mono">3000</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-dark-secondary/50 rounded-lg">
+                                <span class="text-gray-300">Uptime:</span>
+                                <span id="serverUptime" class="text-neon-green font-mono">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Server Controls -->
+                    <div class="glass-effect rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4 text-neon-green">Comenzi Server</h3>
+                        <div class="space-y-4">
+                            <button 
+                                id="startServerBtn"
+                                onclick="startServer()" 
+                                class="w-full px-6 py-3 bg-green-500/20 border border-green-500/50 text-green-400 rounded-lg hover:bg-green-500/30 transition-colors flex items-center justify-center space-x-2"
+                            >
+                                <i class="fas fa-play"></i>
+                                <span>Pornește Server</span>
+                            </button>
+                            <button 
+                                id="restartServerBtn"
+                                onclick="restartServer()" 
+                                class="w-full px-6 py-3 bg-yellow-500/20 border border-yellow-500/50 text-yellow-400 rounded-lg hover:bg-yellow-500/30 transition-colors flex items-center justify-center space-x-2"
+                            >
+                                <i class="fas fa-redo"></i>
+                                <span>Restart Server</span>
+                            </button>
+                            <button 
+                                id="stopServerBtn"
+                                onclick="stopServer()" 
+                                class="w-full px-6 py-3 bg-red-500/20 border border-red-500/50 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors flex items-center justify-center space-x-2"
+                            >
+                                <i class="fas fa-stop"></i>
+                                <span>Oprește Server</span>
+                            </button>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-dark-secondary/30 rounded-lg">
+                            <h4 class="text-sm font-semibold text-gray-400 mb-2">Atenție:</h4>
+                            <p class="text-xs text-gray-500">
+                                Oprirea serverului va întrerupe toate conexiunile active. 
+                                Asigură-te că nu sunt comenzi în curs de procesare.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Server Logs -->
+                <div class="mt-8 glass-effect rounded-xl p-6">
+                    <h3 class="text-xl font-bold mb-4 text-neon-purple">Loguri Server</h3>
+                    <div class="bg-black/50 rounded-lg p-4 font-mono text-sm max-h-96 overflow-y-auto">
+                        <div id="serverLogs" class="text-green-400">
+                            <div class="text-gray-500">[INFO] Server logs will appear here...</div>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex space-x-2">
+                        <button 
+                            onclick="refreshLogs()" 
+                            class="px-4 py-2 bg-neon-blue/20 border border-neon-blue/50 text-neon-blue rounded-lg hover:bg-neon-blue/30 transition-colors"
+                        >
+                            <i class="fas fa-refresh mr-2"></i>Refresh
+                        </button>
+                        <button 
+                            onclick="clearLogs()" 
+                            class="px-4 py-2 bg-red-500/20 border border-red-500/50 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors"
+                        >
+                            <i class="fas fa-trash mr-2"></i>Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -413,6 +507,9 @@
                     break;
                 case 'config':
                     loadConfig();
+                    break;
+                case 'server':
+                    loadServerStatus();
                     break;
             }
         }
@@ -664,10 +761,197 @@
         function editBlogPost(id) { alert(`Editare articol ${id}`); }
         function deleteBlogPost(id) { alert(`Ștergere articol ${id}`); }
 
+        // Server Control Functions
+        let serverStartTime = Date.now();
+        
+        async function loadServerStatus() {
+            try {
+                const response = await fetch('/api/admin/server/status');
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateServerStatus('online');
+                    serverStartTime = Date.now() - (result.uptime * 1000);
+                    updateUptime();
+                    
+                    // Update memory info if available
+                    if (result.memory) {
+                        addLog('info', `Memorie folosită: ${result.memory.used} din ${result.memory.total}`);
+                    }
+                }
+            } catch (error) {
+                updateServerStatus('offline');
+                addLog('error', 'Nu se poate conecta la server pentru status');
+            }
+        }
+        
+        async function startServer() {
+            try {
+                const response = await fetch('/api/admin/server/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateServerStatus('online');
+                    addLog('success', 'Server pornit cu succes');
+                    serverStartTime = Date.now();
+                    updateUptime();
+                } else {
+                    addLog('error', 'Eroare la pornirea serverului: ' + result.message);
+                }
+            } catch (error) {
+                addLog('error', 'Eroare de conexiune: ' + error.message);
+            }
+        }
+        
+        async function stopServer() {
+            if (!confirm('Ești sigur că vrei să oprești serverul? Toate conexiunile active vor fi întrerupte.')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/admin/server/stop', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateServerStatus('offline');
+                    addLog('warning', 'Server oprit');
+                } else {
+                    addLog('error', 'Eroare la oprirea serverului: ' + result.message);
+                }
+            } catch (error) {
+                addLog('error', 'Eroare de conexiune: ' + error.message);
+            }
+        }
+        
+        async function restartServer() {
+            if (!confirm('Ești sigur că vrei să restartezi serverul?')) {
+                return;
+            }
+            
+            try {
+                addLog('info', 'Restartare server în curs...');
+                
+                const response = await fetch('/api/admin/server/restart', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateServerStatus('online');
+                    addLog('success', 'Server restartat cu succes');
+                    serverStartTime = Date.now();
+                    updateUptime();
+                } else {
+                    addLog('error', 'Eroare la restartarea serverului: ' + result.message);
+                }
+            } catch (error) {
+                addLog('error', 'Eroare de conexiune: ' + error.message);
+            }
+        }
+        
+        function updateServerStatus(status) {
+            const statusElement = document.getElementById('serverStatus');
+            const startBtn = document.getElementById('startServerBtn');
+            const stopBtn = document.getElementById('stopServerBtn');
+            const restartBtn = document.getElementById('restartServerBtn');
+            
+            if (status === 'online') {
+                statusElement.textContent = 'Online';
+                statusElement.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-green-500/20 text-green-400';
+                startBtn.disabled = true;
+                startBtn.classList.add('opacity-50');
+                stopBtn.disabled = false;
+                stopBtn.classList.remove('opacity-50');
+                restartBtn.disabled = false;
+                restartBtn.classList.remove('opacity-50');
+            } else {
+                statusElement.textContent = 'Offline';
+                statusElement.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-red-500/20 text-red-400';
+                startBtn.disabled = false;
+                startBtn.classList.remove('opacity-50');
+                stopBtn.disabled = true;
+                stopBtn.classList.add('opacity-50');
+                restartBtn.disabled = true;
+                restartBtn.classList.add('opacity-50');
+            }
+        }
+        
+        function addLog(type, message) {
+            const logsContainer = document.getElementById('serverLogs');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            let colorClass = 'text-gray-400';
+            let icon = 'ℹ️';
+            
+            switch (type) {
+                case 'success':
+                    colorClass = 'text-green-400';
+                    icon = '✅';
+                    break;
+                case 'error':
+                    colorClass = 'text-red-400';
+                    icon = '❌';
+                    break;
+                case 'warning':
+                    colorClass = 'text-yellow-400';
+                    icon = '⚠️';
+                    break;
+                case 'info':
+                    colorClass = 'text-blue-400';
+                    icon = 'ℹ️';
+                    break;
+            }
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = colorClass;
+            logEntry.innerHTML = `[${timestamp}] ${icon} ${message}`;
+            
+            logsContainer.appendChild(logEntry);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+        
+        function refreshLogs() {
+            // In a real implementation, this would fetch logs from the server
+            addLog('info', 'Logs refreshed');
+        }
+        
+        function clearLogs() {
+            const logsContainer = document.getElementById('serverLogs');
+            logsContainer.innerHTML = '<div class="text-gray-500">[INFO] Logs cleared...</div>';
+        }
+        
+        function updateUptime() {
+            const uptimeElement = document.getElementById('serverUptime');
+            
+            setInterval(() => {
+                const uptime = Date.now() - serverStartTime;
+                const hours = Math.floor(uptime / (1000 * 60 * 60));
+                const minutes = Math.floor((uptime % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((uptime % (1000 * 60)) / 1000);
+                
+                uptimeElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+        
         // Check authentication on page load
         document.addEventListener('DOMContentLoaded', function() {
             // For now, we'll start with login screen
             // In a real app, you'd check for existing session
+            
+            // Initialize server status check
+            if (isAuthenticated) {
+                updateUptime();
+            }
         });
     </script>
 </body>
