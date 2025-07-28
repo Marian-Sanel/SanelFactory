@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "open": "./start-and-open.sh",
     "build": "npm run minify-css && npm run minify-js",
     "minify-css": "cleancss -o css/styles.min.css css/styles.css && cleancss -o css/upload.min.css css/upload.css",
     "minify-js": "uglifyjs js/main.js -o js/main.min.js && uglifyjs js/upload.js -o js/upload.min.js && uglifyjs js/chatbot.js -o js/chatbot.min.js",
