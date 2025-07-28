@@ -370,6 +370,94 @@ app.delete('/api/admin/blog-posts/:id', requireAuth, async (req, res) => {
     }
 });
 
+// Server Control Endpoints
+app.post('/api/admin/server/start', requireAuth, async (req, res) => {
+    try {
+        // În realitate, serverul rulează deja dacă primește această cerere
+        // Dar putem simula pornirea sau verifica statusul
+        res.json({ 
+            success: true, 
+            message: 'Server este deja pornit',
+            status: 'online',
+            port: PORT
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            message: 'Eroare la pornirea serverului: ' + error.message 
+        });
+    }
+});
+
+app.post('/api/admin/server/stop', requireAuth, async (req, res) => {
+    try {
+        // Trimitem răspunsul înainte de a opri serverul
+        res.json({ 
+            success: true, 
+            message: 'Server se oprește...',
+            status: 'stopping'
+        });
+        
+        // Oprire gracioasă după un delay scurt
+        setTimeout(() => {
+            console.log('🛑 Server oprit din panoul de administrare');
+            process.exit(0);
+        }, 1000);
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            message: 'Eroare la oprirea serverului: ' + error.message 
+        });
+    }
+});
+
+app.post('/api/admin/server/restart', requireAuth, async (req, res) => {
+    try {
+        // Trimitem răspunsul înainte de restart
+        res.json({ 
+            success: true, 
+            message: 'Server se restartează...',
+            status: 'restarting'
+        });
+        
+        // Restart după un delay scurt
+        setTimeout(() => {
+            console.log('🔄 Server restartat din panoul de administrare');
+            process.exit(1); // Exit code 1 pentru restart (dacă folosești PM2 sau similar)
+        }, 1000);
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            message: 'Eroare la restartarea serverului: ' + error.message 
+        });
+    }
+});
+
+app.get('/api/admin/server/status', requireAuth, async (req, res) => {
+    try {
+        const uptime = process.uptime();
+        const memoryUsage = process.memoryUsage();
+        
+        res.json({
+            success: true,
+            status: 'online',
+            port: PORT,
+            uptime: uptime,
+            memory: {
+                used: Math.round(memoryUsage.heapUsed / 1024 / 1024) + ' MB',
+                total: Math.round(memoryUsage.heapTotal / 1024 / 1024) + ' MB'
+            },
+            nodeVersion: process.version,
+            platform: process.platform
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            message: 'Eroare la obținerea statusului: ' + error.message 
+        });
+    }
+});
+
 // Webhook pentru n8n
 app.post('/api/webhook/n8n', async (req, res) => {
     try {

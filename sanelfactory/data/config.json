@@ -1,0 +1,15 @@
+{
+  "colors": [
+    {"name": "Alb", "hex": "#FFFFFF"},
+    {"name": "Negru", "hex": "#000000"},
+    {"name": "Roșu", "hex": "#FF0000"},
+    {"name": "Albastru", "hex": "#0000FF"},
+    {"name": "Verde", "hex": "#00FF00"}
+  ],
+  "prices": {
+    "fdm": 2.5,
+    "sla": 5.0,
+    "cad": 50.0,
+    "gravura": 15.0
+  }
+}
