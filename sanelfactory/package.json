@@ -1,0 +1,56 @@
+{
+  "name": "sanel-factory-website",
+  "version": "1.0.0",
+  "description": "Website modern pentru servicii de printare 3D - Sanel Factory",
+  "main": "index.html",
+  "scripts": {
+    "dev": "http-server -p 8000 -c-1 -o",
+    "build": "npm run minify-css && npm run minify-js",
+    "minify-css": "cleancss -o css/styles.min.css css/styles.css && cleancss -o css/upload.min.css css/upload.css",
+    "minify-js": "uglifyjs js/main.js -o js/main.min.js && uglifyjs js/upload.js -o js/upload.min.js && uglifyjs js/chatbot.js -o js/chatbot.min.js",
+    "optimize-images": "imagemin images/* --out-dir=images/optimized",
+    "serve": "http-server -p 8000",
+    "test": "echo \"No tests specified\" && exit 0",
+    "deploy": "npm run build && echo \"Ready for deployment\"",
+    "lint": "eslint js/*.js",
+    "format": "prettier --write \"**/*.{html,css,js,json,md}\"",
+    "validate-html": "html-validate *.html pages/*.html"
+  },
+  "keywords": [
+    "printare-3d",
+    "fdm",
+    "sla",
+    "cad",
+    "gravura-laser",
+    "romania",
+    "website",
+    "dark-theme",
+    "frosted-glass"
+  ],
+  "author": "Sanel Factory",
+  "license": "MIT",
+  "devDependencies": {
+    "clean-css-cli": "^5.6.2",
+    "eslint": "^8.57.0",
+    "html-validate": "^8.7.4",
+    "http-server": "^14.1.1",
+    "imagemin": "^8.0.1",
+    "imagemin-cli": "^8.0.0",
+    "prettier": "^3.1.1",
+    "uglify-js": "^3.17.4"
+  },
+  "dependencies": {},
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanel-factory/website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sanel-factory/website/issues"
+  },
+  "homepage": "https://sanelfactory.ro"
+}
