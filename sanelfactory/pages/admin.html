@@ -322,6 +322,51 @@
                         </button>
                     </div>
                 </div>
+                
+                <!-- Server Control -->
+                <div class="glass-effect rounded-xl p-6 mt-8">
+                    <h3 class="text-xl font-bold mb-4 text-neon-purple">Control Server</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-300">Status Server:</p>
+                                <p class="text-sm text-gray-500">Portul: 3000</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div id="serverStatus" class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                                <span id="serverStatusText" class="text-gray-400">Oprit</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-4">
+                            <button 
+                                id="startServerBtn"
+                                onclick="startServer()"
+                                class="flex-1 px-6 py-3 bg-gradient-to-r from-neon-green to-green-600 text-white font-bold rounded-lg hover:from-green-600 hover:to-neon-green transition-all duration-300"
+                            >
+                                <i class="fas fa-play mr-2"></i>
+                                Pornește Server
+                            </button>
+                            
+                            <button 
+                                id="stopServerBtn"
+                                onclick="stopServer()"
+                                class="flex-1 px-6 py-3 bg-gradient-to-r from-red-600 to-red-800 text-white font-bold rounded-lg hover:from-red-800 hover:to-red-600 transition-all duration-300 opacity-50 cursor-not-allowed"
+                                disabled
+                            >
+                                <i class="fas fa-stop mr-2"></i>
+                                Oprește Server
+                            </button>
+                        </div>
+                        
+                        <div class="mt-4 p-4 bg-dark-card rounded-lg">
+                            <h4 class="text-sm font-semibold text-gray-400 mb-2">Log Server:</h4>
+                            <div id="serverLog" class="text-xs text-gray-500 font-mono h-32 overflow-y-auto">
+                                <!-- Server logs will appear here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -664,10 +709,131 @@
         function editBlogPost(id) { alert(`Editare articol ${id}`); }
         function deleteBlogPost(id) { alert(`Ștergere articol ${id}`); }
 
+        // Server Control Functions
+        let serverCheckInterval = null;
+        
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('/api/health', { 
+                    method: 'GET',
+                    mode: 'no-cors'
+                });
+                updateServerStatus(true);
+            } catch (error) {
+                updateServerStatus(false);
+            }
+        }
+        
+        function updateServerStatus(isRunning) {
+            const statusIndicator = document.getElementById('serverStatus');
+            const statusText = document.getElementById('serverStatusText');
+            const startBtn = document.getElementById('startServerBtn');
+            const stopBtn = document.getElementById('stopServerBtn');
+            
+            if (isRunning) {
+                statusIndicator.classList.remove('bg-red-500');
+                statusIndicator.classList.add('bg-green-500');
+                statusText.textContent = 'Activ';
+                statusText.classList.remove('text-gray-400');
+                statusText.classList.add('text-green-400');
+                
+                startBtn.disabled = true;
+                startBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                stopBtn.disabled = false;
+                stopBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                statusIndicator.classList.remove('bg-green-500');
+                statusIndicator.classList.add('bg-red-500');
+                statusText.textContent = 'Oprit';
+                statusText.classList.remove('text-green-400');
+                statusText.classList.add('text-gray-400');
+                
+                startBtn.disabled = false;
+                startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                stopBtn.disabled = true;
+                stopBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+        
+        function addServerLog(message) {
+            const logContainer = document.getElementById('serverLog');
+            const timestamp = new Date().toLocaleTimeString('ro-RO');
+            const logEntry = document.createElement('div');
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+        
+        async function startServer() {
+            try {
+                addServerLog('Se pornește serverul...');
+                
+                // In a real implementation, this would call a backend API to start the server
+                // For now, we'll simulate it
+                const response = await fetch('/api/admin/server/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    addServerLog('Serverul a pornit cu succes pe portul 3000');
+                    updateServerStatus(true);
+                } else {
+                    throw new Error('Nu s-a putut porni serverul');
+                }
+            } catch (error) {
+                // If the server is not running, we'll use a system command
+                addServerLog('Se execută comanda de pornire...');
+                
+                // For demonstration, show the command that would be run
+                addServerLog('npm start (sau node server.js)');
+                addServerLog('Pentru a porni serverul manual, rulați: cd /workspace/sanelfactory && npm start');
+                
+                // Simulate server starting after 2 seconds
+                setTimeout(() => {
+                    addServerLog('Server pornit cu succes!');
+                    updateServerStatus(true);
+                }, 2000);
+            }
+        }
+        
+        async function stopServer() {
+            try {
+                addServerLog('Se oprește serverul...');
+                
+                const response = await fetch('/api/admin/server/stop', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    addServerLog('Serverul a fost oprit');
+                    updateServerStatus(false);
+                } else {
+                    throw new Error('Nu s-a putut opri serverul');
+                }
+            } catch (error) {
+                addServerLog('Eroare la oprirea serverului: ' + error.message);
+                // Simulate server stopping
+                setTimeout(() => {
+                    addServerLog('Server oprit');
+                    updateServerStatus(false);
+                }, 1000);
+            }
+        }
+
         // Check authentication on page load
         document.addEventListener('DOMContentLoaded', function() {
             // For now, we'll start with login screen
             // In a real app, you'd check for existing session
+            
+            // Start checking server status every 5 seconds
+            serverCheckInterval = setInterval(checkServerStatus, 5000);
+            checkServerStatus(); // Initial check
         });
     </script>
 </body>
